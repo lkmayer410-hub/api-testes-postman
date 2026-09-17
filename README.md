@@ -64,7 +64,7 @@ A jornada passou por fundamentos de HTTP, leitura de contratos Swagger, criaçã
 ## 📸 Evidências
 
 ### 📊 Collection Runner — Resultado dos Testes HTML
-![Runner](docs/assets/testes-runner.PNG)
+![Runner](docs/assets/Report.PNG)
 
 ### 🧪 Testes Automatizados com Runner
 ![Postman Testes](docs/assets/postman-automation.PNG)
