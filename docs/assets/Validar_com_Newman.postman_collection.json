@@ -1,0 +1,241 @@
+{
+  "info": {
+    "_postman_id": "abdff983-b3b9-40cb-8ed1-1cc4ce87240d",
+    "name": "Validar com Newman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "8622421"
+  },
+  "item": [
+    {
+      "name": "Validar cadastro de Categoria",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const jsonData = pm.response.json();",
+              "",
+              "pm.test(\"Status code 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Name não vazio\", function () {",
+              "    pm.expect(jsonData.data.name).to.be.a('string').and.to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Description não vazia\", function () {",
+              "    pm.expect(jsonData.data.description).to.be.a('string').and.to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"is_active = true\", function () {",
+              "    pm.expect(jsonData.data.is_active).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"Mensagem \\\"Categoria criada com sucesso!\\\"\", function () {",
+              "    pm.expect(jsonData.mensagens).to.include(\"Categoria criada com sucesso!\");",
+              "});",
+              "",
+              "pm.test(\"Response tem estrutura correta\", function () {",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData).to.have.property('mensagens');",
+              "});",
+              "",
+              "pm.test(\"data.id é um número válido\", function () {",
+              "    pm.expect(jsonData.data.id).to.be.a('number').and.to.be.above(0);",
+              "});",
+              "",
+              "pm.test(\"data.slug não é vazio\", function () {",
+              "    pm.expect(jsonData.data.slug).to.be.a('string').and.to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"data.created_at é uma data válida\", function () {",
+              "    pm.expect(jsonData.data.created_at).to.be.a('string').and.to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Content-Type é application/json\", function () {",
+              "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{Token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\":\"{{$randomJobArea}}--{{$randomInt}}\",\n  \"description\": \"{{$randomLoremSentence}}\"\n}",
+          "options": {
+            "raw": {
+              "headerFamily": "json",
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "categories"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Categoria criada",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer <token>",
+                "description": "Added as a part of security scheme: bearer"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eletrônicoddddds\",\n  \"description\": \"Produtos eletrônicosddddd variados\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Dados inválidos",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer <token>",
+                "description": "Added as a part of security scheme: bearer"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eletrônicos\",\n  \"description\": \"Produtos eletrônicos variados\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}categories",
+              "host": [
+                "{{baseUrl}}categories"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Categoria duplicada",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer <token>",
+                "description": "Added as a part of security scheme: bearer"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eletrônicos\",\n  \"description\": \"Produtos eletrônicos variados\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        }
+      ]
+    }
+  ]
+}
